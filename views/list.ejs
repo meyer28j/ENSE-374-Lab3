@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css" />
+    <title>
+        To Do List
+    </title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm"></div>
+            <section id="title" class="col-sm">
+                <h1 class="text-center marginSpace">
+                    To Do List
+                </h1>
+            </section>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"></div>
+            <section id="accordion" class="col- accordion shadow m-3 p-0">
+                <button id="buttonLogout" class="btn btn-block text-center card-header bg-light" type="button"
+                    data-toggle="collapse" data-target="#logoutCollapse" aria-expanded="false"
+                    aria-controls="logoutCollapse">
+                    <p>Signed in as <span class="link text-primary">user@abc.ca</span></p>
+                </button>
+                <div id="logoutCollapse" class="collapse" aria-labelledby="buttonLogout" data-parent="#accordion">
+                    <a href="login.html">
+                        <button class="btn card-body w-100 bg-warning text-dark">
+                            <h5 class="m-0">Log Out</h5>
+                        </button>
+                    </a>
+                </div>
+            </section>
+            <div class="col-sm"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm"></div>
+            <section class="col- marginSpace">
+                <form id="todo">
+                    <!--Static Examples-->
+                    <article class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" checked="true" />
+                            </div>
+                        </div>
+                        <span class="input-group-text form-control line-through">My finished task</span>
+                        <div class="input-group-append hidden">
+                            <button class="btn btn-outline-secondary" type="button">Abandon</button>
+                        </div>
+                    </article>
+                    <article class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" />
+                            </div>
+                        </div>
+                        <span class="input-group-text form-control">My unfinished task</span>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">Abandon</button>
+                        </div>
+                    </article>
+                    <article class="input-group mb-3">
+                        <span class="input-group-text form-control line-through">Someone else's finished task</span>
+                    </article>
+                    <article class="input-group mb-3">
+                        <span class="input-group-text form-control">Someone else's unfinished task</span>
+                    </article>
+                    <article class="input-group mb-3">
+                        <span class="input-group-text form-control">Unclaimed task</span>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">Claim</button>
+                        </div>
+                    </article>
+                    <article class="input-group mb-3">
+                        <input id="newTask" type="text" class="form-control" placeholder="Enter a new task here" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="buttonAdd">Add</button>
+                        </div>
+                    </article>
+                    <article class="input-group mb-3">
+                        <button class="btn btn-outline-secondary" type="button" id="buttonRemove">Remove
+                            Complete</button>
+                    </article>
+                    <!--End Static Examples-->
+                </form>
+            </section>
+            <div class="col-sm"></div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/list.js"></script>
+
+</body>
+
+</html>

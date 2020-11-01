@@ -1,0 +1,17 @@
+{
+  "name": "lab3",
+  "version": "1.0.0",
+  "description": "learning exercise on using node and passing data with the controller",
+  "main": "index.js",
+  "scripts": {
+    "test": "console.log(\"index.js loaded successfully.\");"
+  },
+  "author": "Jacob Meyer",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "jquery": "^3.5.1"
+  }
+}
