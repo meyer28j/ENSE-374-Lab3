@@ -25,6 +25,10 @@ app.get("/", function (request, response) {
     response.render("login");
 });
 
+app.get("/login", function (request, response) {
+    response.render("login");
+});
+
 app.post("/login", function (request, response) {
     console.log("directed to route 'login'");
     let loginEmail = request.body.loginEmail;
@@ -35,14 +39,27 @@ app.post("/login", function (request, response) {
             console.log("username and password matched");
             response.redirect(307, "/todo");
         }
-    } else { // no username match
-    response.redirect("/");
     }
+    // no username match
+    response.redirect("/");
 });
 
 app.post("/register", function (request, response) {
     console.log("directed to route 'register'");
-
+    let emailInput = request.body.signupEmail;
+    let passwordInput = request.body.signupPassword;
+    let userToVerify = getUserFromUsername(emailInput);
+    if (userToVerify) { // user exists, cancel signup
+	console.log(emailInput + " is already taken as a username.");
+	response.redirect("/");
+    } else { // user name free
+	let newUser = new User(emailInput, passwordInput);
+	console.log("creating new user...\nusername: " +
+		    newUser.username + "\npassword: " +
+		    newUser.password);
+	appendToUsers(newUser);
+	response.redirect(307, "/todo");
+    }
 });
 
 app.post("/todo", function (request, response) {

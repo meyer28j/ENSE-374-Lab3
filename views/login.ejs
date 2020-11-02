@@ -74,19 +74,20 @@
                     </div>
                     <div id="signupCollapse" class="collapse" aria-labelledby="signupHeader" data-parent="#accordion">
                         <div class="card-body">
-                            <form id="signupForm" action="list.html" method="post">
+                            <form id="signupForm" action="/register" method="post">
                                 <div class="form-group">
-                                    <label for="signupEmail">Email address</label>
-                                    <input type="email" class="form-control" id="signupEmail"
-                                        aria-describedby="emailHelp">
+                                  <label for="signupEmail">Email address</label>
+				  <input type="text" class="form-control" name="signupEmail" id="signupEmail" />
+                                   <!--<input type="email" class="form-control" id="signupEmail"
+                                        aria-describedby="emailHelp">-->
                                 </div>
                                 <div class="form-group">
                                     <label for="signupPassword">Password</label>
-                                    <input type="password" class="form-control" id="signupPassword">
+                                    <input type="password" class="form-control" name="signupPassword" id="signupPassword">
                                 </div>
                                 <div class="form-group">
                                     <label for="signupVerification">Verification</label>
-                                    <input type="password" class="form-control" id="signupVerification">
+                                    <input type="text" class="form-control" name="signupVerification" id="signupVerification">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Sign Up</button>
                             </form>
