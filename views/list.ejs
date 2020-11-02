@@ -28,6 +28,9 @@
                 <h1 class="text-center marginSpace">
                     To Do List
                 </h1>
+                <h1 class="text-center marginSpace">
+                    <%=title%>
+                </h1>
             </section>
             <div class="col-sm"></div>
         </div>
@@ -37,7 +40,7 @@
                 <button id="buttonLogout" class="btn btn-block text-center card-header bg-light" type="button"
                     data-toggle="collapse" data-target="#logoutCollapse" aria-expanded="false"
                     aria-controls="logoutCollapse">
-                    <p>Signed in as <span class="link text-primary">user@abc.ca</span></p>
+                    <p>Signed in as <span class="link text-primary"><%=username%></span></p>
                 </button>
                 <div id="logoutCollapse" class="collapse" aria-labelledby="buttonLogout" data-parent="#accordion">
                     <a href="login">
@@ -53,8 +56,48 @@
         <div class="row">
             <div class="col-sm"></div>
             <section class="col- marginSpace">
+
+
+                <% for (task of tasks) { console.log("task " + task._id + " loaded");%>
+                <form action="/<%=task._id%>" id="<%=task._id%>">
+                    <input type="hidden" name="task<%=task._id%>" value="task<%=task._id%>" id="task<%=task._id%>" />
+                    <article class="input-group mb-3<% if (task.cleared) { %> hidden<% } %>">
+                        <% if (task.done) { %>
+                        <div class="input-group-prepend<% if (task.owner != username) { %> hidden<% } %>">
+                            <div class="input-group-text">
+                                <input type="checkbox" checked="true" />
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <span class="input-group-text form-control<% if (task.done) { %> line-through<% } %>">
+                            <%=task.name%>
+                        </span>
+
+
+                        <div
+                            class="input-group-append<% if ((task.owner != username && task.owner != "undefined") || task.done) { %> hidden<% } %>">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <% if (task.owner == "undefined") { %>Claim
+                                <% } else if (task.owner == username) { %>Abandon<% } %>
+                            </button>
+                        </div>
+
+                    </article>
+                </form>
+                <% } %>
+
+                <!--
+                            case unclaimed              -> claim button
+                            case claimed by you         -> abandon button
+                            case finished by you        -> hidden abandon button
+                            case claimed by another     -> hidden button
+                            case finished by another    -> hidden button
+                        -->
+
+                <!--Static Examples-->
+                <!--
                 <form id="todo">
-                    <!--Static Examples-->
                     <article class="input-group mb-3">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -99,8 +142,10 @@
                         <button class="btn btn-outline-secondary" type="button" id="buttonRemove">Remove
                             Complete</button>
                     </article>
-                    <!--End Static Examples-->
                 </form>
+            -->
+                <!--End Static Examples-->
+
             </section>
             <div class="col-sm"></div>
 

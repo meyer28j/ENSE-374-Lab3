@@ -8,6 +8,7 @@ const port = 3000;
 const jsonFunctions = require(__dirname + "/js/jsonFunctions.js");
 const Task = jsonFunctions.Task;
 const User = jsonFunctions.User;
+const loadAllTaskData = jsonFunctions.loadAllTaskData;
 const appendToUsers = jsonFunctions.appendToUsers;
 const getUserFromUsername = jsonFunctions.getUserFromUsername;
 
@@ -21,11 +22,11 @@ app.listen(port, function () {
 });
 
 app.get("/", function (request, response) {
-    // response.render("index");
-    response.render("login");
+    response.redirect("/login");
 });
 
 app.get("/login", function (request, response) {
+    console.log("directed to route 'login'");
     response.render("login");
 });
 
@@ -37,11 +38,14 @@ app.post("/login", function (request, response) {
     if (userToVerify) {
         if (userToVerify.password == loginPassword) {
             console.log("username and password matched");
-            response.redirect(307, "/todo");
+            response.redirect(307, "/todo?username=" + userToVerify.username);
+        } else { // username match, no password match
+            console.log("existing username, incorrect password");
+            response.redirect("/login");
         }
+    } else { // no username match
+    response.redirect("/login");
     }
-    // no username match
-    response.redirect("/");
 });
 
 app.post("/register", function (request, response) {
@@ -52,17 +56,19 @@ app.post("/register", function (request, response) {
     if (userToVerify) { // user exists, cancel signup
 	console.log(emailInput + " is already taken as a username.");
 	response.redirect("/");
-    } else { // user name free
+    } else { // user name is available
 	let newUser = new User(emailInput, passwordInput);
 	console.log("creating new user...\nusername: " +
 		    newUser.username + "\npassword: " +
 		    newUser.password);
-	appendToUsers(newUser);
-	response.redirect(307, "/todo");
+    appendToUsers(newUser);
+	response.redirect(307, "/todo?username=" + newUser.username);
     }
 });
 
 app.post("/todo", function (request, response) {
     console.log("directed to route 'todo'");
-    response.render("list");
+    let standInTitle = "Stand-In Title";
+    let taskList = loadAllTaskData();
+    response.render("list", {title: standInTitle, username: request.query.username, tasks: taskList});
 });

@@ -22,7 +22,11 @@ class User {
     }
 }
 
-function loadAllUserData () {
+function loadAllTaskData() {
+    return JSON.parse(fs.readFileSync(tasksFile, 'utf8'));
+}
+
+function loadAllUserData() {
     // read all user data from users.json and return as JSON
     return JSON.parse(fs.readFileSync(usersFile, 'utf8'));
 }
@@ -30,23 +34,26 @@ function loadAllUserData () {
 // TODO: ensure newUser is correct object
 // PROBLEM: function loads and rewrites ALL JSON DATA.
 //          This is horrible! Make it just append to existing data
-function appendToUsers (newUser) {
+function appendToUsers(newUser) {
     let allUserData = loadAllUserData();
-    console.log("allUserData: " + allUserData);
     allUserData.push(newUser);
     let updatedUserData = JSON.stringify(allUserData);
     console.log("updatedUserData: " + updatedUserData);
-    fs.writeFileSync(usersFile, updatedUserData, "utf8", function(err) {
+    fs.writeFileSync(usersFile, updatedUserData, "utf8", function (err) {
         if (err) console.log(err);
     });
 }
 
-function getUserFromUsername (usernameSearch) {
+function getUserFromUsername(usernameSearch) {
     console.log("Searching " + usersFile + " for '" + usernameSearch + "'");
-    
+
     let allUserData = loadAllUserData();
     for (user of allUserData) {
-        if (user.username == usernameSearch) return user;
+        console.log("checking user: " + user.username);
+        if (user.username == usernameSearch) {
+            console.log("returning user: " + user.username);
+            return user;
+        }
     }
 
     console.log("user not found");
@@ -55,5 +62,6 @@ function getUserFromUsername (usernameSearch) {
 
 exports.Task = Task;
 exports.User = User;
+exports.loadAllTaskData = loadAllTaskData;
 exports.appendToUsers = appendToUsers;
 exports.getUserFromUsername = getUserFromUsername;
