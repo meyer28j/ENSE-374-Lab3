@@ -1,6 +1,9 @@
 # Test directory
 test/
 
+# Assignment file
+Student-Notes.odt
+
 # Logs
 logs
 *.log

@@ -50,7 +50,7 @@ function getUserFromUsername (usernameSearch) {
     }
 
     console.log("user not found");
-    return null;
+    return 0;
 }
 
 exports.Task = Task;
