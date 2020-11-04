@@ -18,18 +18,6 @@ function addCheckbox(parent) {
     parent.prepend(mrSet); // attach checkbox div to parent div
 }
 
-// deletes checkbox from given parent element
-function removeCheckbox(parent) {
-
-    let prepend = parent.children().first(); // get first child of element
-    console.log(prepend.find("input"));
-    if (prepend.find("input").length > 0) { // check there is a checkbox prepended
-        prepend.remove(); // remove prepended element
-        console.log("Checkbox removed");
-    }
-}
-
-
 function showCheckbox(parent) {
     let checkboxArea = parent.children().first();
     if (checkboxArea.hasClass("hidden")) {
@@ -54,7 +42,6 @@ function abandon() {
     btn.text("Claim"); // change text to "claim"
     btn.one("click", claim); // add abandon event handler
 
-    // removeCheckbox(parent); // hide checkbox
     hideCheckbox(parent); // hide checkbox
     console.log("Task '" + parent.find("span").text() + "' abandoned");
 }
@@ -73,45 +60,35 @@ function claim() {
     console.log("Task '" + parent.find("span").text() + "' claimed");
 }
 
-// creates and prepends a div with a checkbox, an
-// abandon button, and text from "new task" field
 function addTask() {
-    let newText = $("#newTask").val(); // get text from "add" element
-    if (newText == "" || newText == null) { return; } // no text added!?!? Get outta here!
+    let addTaskFormElement = $("#addTask"); // this will be static
+    let newTaskFormElement = addTaskFormElement.clone(); // this will be modified to become part of the list
+    addTaskFormElement.find("#newTask").val("");
 
-    let newTask = $("<article></article>").addClass("input-group mb-3"); // create parent article
+    // form attributes
+    newTaskFormElement.attr("id", newTaskFormElement.children().first().attr("id"));
+    newTaskFormElement.attr("name", newTaskFormElement.attr("id"));
+    newTaskFormElement.attr("action", "/claim");
 
-    addCheckbox(newTask); // create checkbox prepend
+    // text attributes
+    let newTaskTextElement = newTaskFormElement.find("#newTask");
+    let newTaskText = newTaskTextElement.val();
+    newTaskTextElement.replaceWith($("<span class=\"input-group-text form-control\">" + newTaskText + "</span>"));
 
-    // create task text
-    let mrSet = $("<span></span>").addClass("input-group-text form-control"); // create input group text span
-    mrSet.text(newText); // insert new text into span
-    newTask.append(mrSet); // attach text span
+    // button attributes
+    let newTaskButtonElement = newTaskFormElement.find("#buttonAdd");
+    newTaskButtonElement.attr("id", "");
+    newTaskButtonElement.text("Claim");
+    newTaskButtonElement.on("click", claim);
 
-    // create abandon button
-    mrSet = $("<div></div>").addClass("input-group-append") // create input group append div
-    let mrSetJr = $("<button></button>").addClass("btn btn-outline-secondary"); // create abandon button
-    mrSetJr.attr("type", "button"); // add button attribute
-    mrSetJr.text("Abandon"); // add button text
-    mrSetJr.first().one("click", abandon); // attach event listener to abandon click
-    mrSet.append(mrSetJr); // append button to div
-    newTask.append(mrSet); // append button div to parent div
+    // checkbox attributes
+    newTaskFormElement.find(":checkbox").on("click", check);
 
-    let addTask = $("#newTask"); // get "add new task" bar
-    addTask.parent().parent().before(newTask); // insert new task before "add new task" bar
-    addTask.val(""); // clear add task text
-
-    let newId = $("#newId"); // get id of new task
-    newId.value++; // increment id to new, unique value
-
-    console.log("New task '" + newText + "' added");
-
+    addTaskFormElement.before(newTaskFormElement);
 }
 
 // remove all completed tasks
 function removeComplete() {
-    
-
     let articles = $("span.line-through").parent(); // collect articles
     articles.removeClass("disappear-left");
     // articles.children().text(""); // blank out text

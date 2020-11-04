@@ -44,11 +44,11 @@
                 </button>
                 <div id="logoutCollapse" class="collapse" aria-labelledby="buttonLogout" data-parent="#accordion">
                     <a href="/logout">
-                    <!--<form action="/logout" id="logout" name="logout">-->
+                        <!--<form action="/logout" id="logout" name="logout">-->
                         <button type="submit" class="btn card-body w-100 bg-warning text-dark">
                             <h5 class="m-0">Log Out</h5>
                         </button>
-                    <!--</form>-->
+                        <!--</form>-->
                     </a>
                 </div>
             </section>
@@ -84,6 +84,7 @@
                 %>
                 <form action="<%=buttonClickRoute%>" name="task<%=task._id%>" id="task<%=task._id%>">
                     <input type="hidden" name="task<%=task._id%>" value="task<%=task._id%>" id="task<%=task._id%>" />
+                    <input type="hidden" id="creator" name="creator" value="<%=task.creator%>" />
                     <article class="input-group mb-3<% if (task.cleared) { %> hidden<% } %>">
 
                         <div class="input-group-prepend<% if (task.owner != username) { %> hidden<% } %>">
@@ -106,10 +107,16 @@
                 <% } %>
 
                 <form action="/addTask" name="addTask" id="addTask">
+                    <input type="hidden" id="task<%=uniqueId%>" name="task<%=uniqueId%>" value="task<%=uniqueId%>" />
                     <input type="hidden" id="creator" name="creator" value="<%=username%>" />
-                    <input type="hidden" id="newId" name="newId" value="<%=uniqueId%>" />
                     <article class="input-group mb-3">
-                        <input id="newTask" name="newTask" type="text" class="form-control" placeholder="Enter a new task here" />
+                        <div class="input-group-prepend hidden">
+                            <div class="input-group-text">
+                                <input type="checkbox" checked="false" />
+                            </div>
+                        </div>
+                        <input id="newTask" name="newTask" type="text" class="form-control"
+                            placeholder="Enter a new task here" />
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="buttonAdd">Add</button>
                         </div>
