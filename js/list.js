@@ -79,18 +79,18 @@ function addTask() {
     let newText = $("#newTask").val(); // get text from "add" element
     if (newText == "" || newText == null) { return; } // no text added!?!? Get outta here!
 
-    let newTask = $("<div></div>").addClass("input-group mb-3"); // create parent div
+    let newTask = $("<article></article>").addClass("input-group mb-3"); // create parent article
 
     addCheckbox(newTask); // create checkbox prepend
 
     // create task text
-    mrSet = $("<span></span>").addClass("input-group-text form-control"); // create input group text span
+    let mrSet = $("<span></span>").addClass("input-group-text form-control"); // create input group text span
     mrSet.text(newText); // insert new text into span
     newTask.append(mrSet); // attach text span
 
     // create abandon button
     mrSet = $("<div></div>").addClass("input-group-append") // create input group append div
-    mrSetJr = $("<button></button>").addClass("btn btn-outline-secondary"); // create abandon button
+    let mrSetJr = $("<button></button>").addClass("btn btn-outline-secondary"); // create abandon button
     mrSetJr.attr("type", "button"); // add button attribute
     mrSetJr.text("Abandon"); // add button text
     mrSetJr.first().one("click", abandon); // attach event listener to abandon click
@@ -98,8 +98,11 @@ function addTask() {
     newTask.append(mrSet); // append button div to parent div
 
     let addTask = $("#newTask"); // get "add new task" bar
-    addTask.parent().before(newTask); // insert new task before "add new task" bar
+    addTask.parent().parent().before(newTask); // insert new task before "add new task" bar
     addTask.val(""); // clear add task text
+
+    let newId = $("#newId"); // get id of new task
+    newId.value++; // increment id to new, unique value
 
     console.log("New task '" + newText + "' added");
 
@@ -107,17 +110,21 @@ function addTask() {
 
 // remove all completed tasks
 function removeComplete() {
+    
 
     let articles = $("span.line-through").parent(); // collect articles
+    articles.removeClass("disappear-left");
     // articles.children().text(""); // blank out text
+    
     articles.addClass("disappear-left"); // add animation class
-
+    
     setInterval(function () { // wait for animation duration
         // articles.remove(); // then delete
         articles.addClass("hidden");
     }, 500);
     console.log("Completed tasks hidden");
-}
+};
+
 
 $(document).ready(function () {
     console.log("list.js jQuery loaded successfully.");
@@ -130,16 +137,17 @@ $(document).ready(function () {
             $(this).click(); // toggle the check in the 'mismatched' cases
         }
         $(this).on("click", check); // add line-through change for checkbox click
-    })
+    });
 
     // add click event listeners for existing claim/abandon buttons
     $(":button").each(function () { // for every button
-        if ($(this).text() == "Abandon") {
+        console.log("text result: " + $(this).text() + "\nsearch result: " + $(this).text().search("Abandon"));
+        if ($(this).text().search("Abandon") != -1) {
             $(this).one("click", abandon);
-        } else if ($(this).text() == "Claim") {
-            $(this).one("click", claim)
+        } else if ($(this).text().search("Claim") != -1) {
+            $(this).one("click", claim);
         }
-    })
+    });
 
     // add timer for hiding the logout button
     $("#accordion").on("mouseleave", (function () {
@@ -149,7 +157,6 @@ $(document).ready(function () {
                 $("#buttonLogout").click(); // hide the button
             }
         }, 1000);
-        
     }));
     // add event listeners for 'add' and 'remove' buttons
     $("#buttonAdd").on("click", addTask); // create new task when you click the add button

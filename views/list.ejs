@@ -43,10 +43,12 @@
                     <p>Signed in as <span class="link text-primary"><%=username%></span></p>
                 </button>
                 <div id="logoutCollapse" class="collapse" aria-labelledby="buttonLogout" data-parent="#accordion">
-                    <a href="login">
-                        <button class="btn card-body w-100 bg-warning text-dark">
+                    <a href="/logout">
+                    <!--<form action="/logout" id="logout" name="logout">-->
+                        <button type="submit" class="btn card-body w-100 bg-warning text-dark">
                             <h5 class="m-0">Log Out</h5>
                         </button>
+                    <!--</form>-->
                     </a>
                 </div>
             </section>
@@ -56,99 +58,71 @@
         <div class="row">
             <div class="col-sm"></div>
             <section class="col- marginSpace">
+                <% 
+                let claimed = false; 
+                let buttonClickRoute = "";
 
-
-                <% for (task of tasks) { console.log("task " + task._id + " loaded");%>
-                <form action="/<%=task._id%>" id="<%=task._id%>">
+                // purpose: save highest LOADED id so when a new
+                // task is created, you can assign a new, unique id
+                let uniqueId = 0; 
+                
+                for (task of tasks) { 
+                    console.log(JSON.stringify(task));
+                    if (task.owner == username) { 
+                        claimed = true;
+                        buttonClickRoute = "/abandonOrComplete";
+                    
+                    } else if (task.owner == "undefined") {
+                        claimed = false;
+                        buttonClickRoute = "/claim";
+                        // look at the diagram
+                    } else {
+                        claimed = false;
+                        buttonClickRoute = "this form is invisible to this user";
+                    }
+                    if (task._id >= uniqueId) uniqueId = task._id + 1;
+                %>
+                <form action="<%=buttonClickRoute%>" name="task<%=task._id%>" id="task<%=task._id%>">
                     <input type="hidden" name="task<%=task._id%>" value="task<%=task._id%>" id="task<%=task._id%>" />
                     <article class="input-group mb-3<% if (task.cleared) { %> hidden<% } %>">
-                        <% if (task.done) { %>
+
                         <div class="input-group-prepend<% if (task.owner != username) { %> hidden<% } %>">
                             <div class="input-group-text">
-                                <input type="checkbox" checked="true" />
+                                <input type="checkbox" checked="<%=task.done%>" />
                             </div>
                         </div>
-                        <% } %>
-
                         <span class="input-group-text form-control<% if (task.done) { %> line-through<% } %>">
                             <%=task.name%>
                         </span>
-
-
                         <div
                             class="input-group-append<% if ((task.owner != username && task.owner != "undefined") || task.done) { %> hidden<% } %>">
-                            <button class="btn btn-outline-secondary" type="button">
-                                <% if (task.owner == "undefined") { %>Claim
-                                <% } else if (task.owner == username) { %>Abandon<% } %>
+                            <button class="btn btn-outline-secondary"
+                                type="button"><% if (task.owner == "undefined") { %>Claim<% } else if (task.owner == username) { %>Abandon<% } else { %>(invisible)
+                                button<% } %>
                             </button>
                         </div>
-
                     </article>
                 </form>
                 <% } %>
 
-                <!--
-                            case unclaimed              -> claim button
-                            case claimed by you         -> abandon button
-                            case finished by you        -> hidden abandon button
-                            case claimed by another     -> hidden button
-                            case finished by another    -> hidden button
-                        -->
-
-                <!--Static Examples-->
-                <!--
-                <form id="todo">
+                <form action="/addTask" name="addTask" id="addTask">
+                    <input type="hidden" id="creator" name="creator" value="<%=username%>" />
+                    <input type="hidden" id="newId" name="newId" value="<%=uniqueId%>" />
                     <article class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox" checked="true" />
-                            </div>
-                        </div>
-                        <span class="input-group-text form-control line-through">My finished task</span>
-                        <div class="input-group-append hidden">
-                            <button class="btn btn-outline-secondary" type="button">Abandon</button>
-                        </div>
-                    </article>
-                    <article class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox" />
-                            </div>
-                        </div>
-                        <span class="input-group-text form-control">My unfinished task</span>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Abandon</button>
-                        </div>
-                    </article>
-                    <article class="input-group mb-3">
-                        <span class="input-group-text form-control line-through">Someone else's finished task</span>
-                    </article>
-                    <article class="input-group mb-3">
-                        <span class="input-group-text form-control">Someone else's unfinished task</span>
-                    </article>
-                    <article class="input-group mb-3">
-                        <span class="input-group-text form-control">Unclaimed task</span>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Claim</button>
-                        </div>
-                    </article>
-                    <article class="input-group mb-3">
-                        <input id="newTask" type="text" class="form-control" placeholder="Enter a new task here" />
+                        <input id="newTask" name="newTask" type="text" class="form-control" placeholder="Enter a new task here" />
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="buttonAdd">Add</button>
                         </div>
                     </article>
+                </form>
+                <form action="/purge" name="purge" id="purge">
                     <article class="input-group mb-3">
                         <button class="btn btn-outline-secondary" type="button" id="buttonRemove">Remove
                             Complete</button>
                     </article>
                 </form>
-            -->
-                <!--End Static Examples-->
-
             </section>
             <div class="col-sm"></div>
-
         </div>
     </div>
 
