@@ -9,6 +9,7 @@ const jsonFunctions = require(__dirname + "/js/jsonFunctions.js");
 const Task = jsonFunctions.Task;
 const User = jsonFunctions.User;
 const loadAllTaskData = jsonFunctions.loadAllTaskData;
+const appendToTasks = jsonFunctions.appendToTasks;
 const appendToUsers = jsonFunctions.appendToUsers;
 const getUserFromUsername = jsonFunctions.getUserFromUsername;
 
@@ -71,4 +72,35 @@ app.post("/todo", function (request, response) {
     let standInTitle = "Stand-In Title";
     let taskList = loadAllTaskData();
     response.render("list", {title: standInTitle, username: request.query.username, tasks: taskList});
+});
+
+app.get("/logout", function (request, response) {
+    console.log("directed to route 'logout'");
+    response.redirect("/login");
+});
+
+app.post("/addTask", function (request, response) {
+    console.log("directed to route 'addTask'");
+    // refer to post /register
+    let id = request.body.newId;
+    let nameInput = request.body.newTask;
+    let owner = request.body.creator;
+    let creator = owner;
+    let newTask = new Task(id, nameInput, owner, creator, false, false)
+    appendToTasks(newTask)
+});
+
+app.post("/claim", function (request, response) {
+
+});
+
+app.post("abandonOrComplete", function (request, response) {
+
+});
+
+app.post("unfinish", function (request, response) {
+
+});
+app.post("purge", function (request, response) {
+
 });

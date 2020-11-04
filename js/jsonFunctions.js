@@ -26,6 +26,16 @@ function loadAllTaskData() {
     return JSON.parse(fs.readFileSync(tasksFile, 'utf8'));
 }
 
+function appendToTasks(newTask) {
+    let allTaskData = loadAllTaskData();
+    allTaskData.push(newTask);
+    let updatedTaskData = JSON.stringify(allTaskData);
+    console.log("updatedTaskData: " + updatedTaskData);
+    fs.writeFileSync(tasksFile, updatedTaskData, "utf8", function (err) {
+        if (err) console.log(err);
+    });
+}
+
 function loadAllUserData() {
     // read all user data from users.json and return as JSON
     return JSON.parse(fs.readFileSync(usersFile, 'utf8'));
@@ -34,6 +44,7 @@ function loadAllUserData() {
 // TODO: ensure newUser is correct object
 // PROBLEM: function loads and rewrites ALL JSON DATA.
 //          This is horrible! Make it just append to existing data
+
 function appendToUsers(newUser) {
     let allUserData = loadAllUserData();
     allUserData.push(newUser);
@@ -63,5 +74,6 @@ function getUserFromUsername(usernameSearch) {
 exports.Task = Task;
 exports.User = User;
 exports.loadAllTaskData = loadAllTaskData;
+exports.appendToTasks = appendToTasks;
 exports.appendToUsers = appendToUsers;
 exports.getUserFromUsername = getUserFromUsername;
