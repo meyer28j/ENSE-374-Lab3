@@ -79,28 +79,47 @@ app.get("/logout", function (request, response) {
     response.redirect("/login");
 });
 
+// BUG: name and Id aren't retrieved from form
 app.post("/addTask", function (request, response) {
     console.log("directed to route 'addTask'");
-    // refer to post /register
-    let id = request.body.newId;
+    let id = request.body.taskId;
+    console.log("request.body: " + JSON.stringify(request.body));
+    console.log("new id: " + id);
     let nameInput = request.body.newTask;
+    console.log("new name: " + nameInput);
     let owner = request.body.creator;
+    console.log("new owner: " + owner);
     let creator = owner;
-    let newTask = new Task(id, nameInput, owner, creator, false, false)
-    appendToTasks(newTask)
+    let newTask = new Task(id, nameInput, owner, creator, false, false);
+    //let newTask = new Task(6, "newTask", "admin", "admin", false, false);
+    console.log("newTask: " + JSON.stringify(newTask));
+    // appendToTasks(newTask);
+    response.redirect(307, "/todo?username=" + owner);
 });
 
 app.post("/claim", function (request, response) {
+    console.log("directed to route '/claim'");
 
+    response.redirect(307, "/todo");
 });
 
 app.post("abandonOrComplete", function (request, response) {
+    console.log("directed to route '/abandonOrComplete'");
 
+    response.redirect(307, "/todo");
 });
 
 app.post("unfinish", function (request, response) {
+    console.log("directed to route '/unfinish'");
+    let taskChecked = request.body.taskId;
+    console.log("task being checked: " + taskChecked);
+    let taskId = taskChecked[taskChecked.search(/\d+/)];
+    setTaskUnfinished(taskChecked);
 
+    response.redirect(307, "/todo");
 });
 app.post("purge", function (request, response) {
+    console.log("directed to route '/purge'");
 
+    response.redirect(307, "/todo");
 });

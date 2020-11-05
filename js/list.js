@@ -42,6 +42,7 @@ function abandon() {
     btn.text("Claim"); // change text to "claim"
     btn.one("click", claim); // add abandon event handler
 
+    parent.parent().attr("action", "/claim"); // update form action
     hideCheckbox(parent); // hide checkbox
     console.log("Task '" + parent.find("span").text() + "' abandoned");
 }
@@ -55,15 +56,26 @@ function claim() {
     btn.text("Abandon"); // change text to "abandon"
     btn.one("click", abandon); // add claim event listener
 
-    // addCheckbox(parent); // add checkbox
+    parent.parent().attr("action", "/abandonOrComplete"); // update form action
     showCheckbox(parent); // show checkbox
     console.log("Task '" + parent.find("span").text() + "' claimed");
 }
 
 function addTask() {
-    let addTaskFormElement = $("#addTask"); // this will be static
-    let newTaskFormElement = addTaskFormElement.clone(); // this will be modified to become part of the list
+    let addTaskFormElement = $("#addTask"); 
+    let newTaskFormElement = addTaskFormElement.clone();
+
+    // update old form attributes
     addTaskFormElement.find("#newTask").val("");
+    let addTaskIdentifierInputElement = addTaskFormElement.children().first();
+    let oldId = addTaskIdentifierInputElement.attr("id");
+    let newId = oldId[oldId.search(/\d+/)];
+    newId++;
+    let newIdText = "task" + newId;
+    console.log("newIdText: " + newIdText);
+    addTaskIdentifierInputElement.attr("id", newIdText);
+    addTaskIdentifierInputElement.attr("name", newIdText);
+    addTaskIdentifierInputElement.attr("value", newIdText);
 
     // form attributes
     newTaskFormElement.attr("id", newTaskFormElement.children().first().attr("id"));
@@ -114,6 +126,8 @@ $(document).ready(function () {
             $(this).click(); // toggle the check in the 'mismatched' cases
         }
         $(this).on("click", check); // add line-through change for checkbox click
+
+        // $(this).on("click", $(this).parents("form").submit());
     });
 
     // add click event listeners for existing claim/abandon buttons

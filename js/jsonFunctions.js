@@ -30,10 +30,27 @@ function appendToTasks(newTask) {
     let allTaskData = loadAllTaskData();
     allTaskData.push(newTask);
     let updatedTaskData = JSON.stringify(allTaskData);
-    console.log("updatedTaskData: " + updatedTaskData);
+    // console.log("updatedTaskData: " + updatedTaskData);
     fs.writeFileSync(tasksFile, updatedTaskData, "utf8", function (err) {
         if (err) console.log(err);
     });
+}
+
+function setTaskUnfinished(taskToUnfinishId) {
+    let allTaskData = loadAllTaskData();
+
+    for (task in allTaskData) {
+        if (task._id == taskToUnfinishId) {
+            task.done = false;
+            fs.writeFileSync(tasksFile, allTaskData, "utf8", function (err) {
+                if (err) console.log(err);
+            });
+            console.log("Task " + task.name + " set to 'unfinished'");
+            return;
+        }
+    }
+    console.log("Task not found");
+    return;
 }
 
 function loadAllUserData() {
@@ -44,12 +61,11 @@ function loadAllUserData() {
 // TODO: ensure newUser is correct object
 // PROBLEM: function loads and rewrites ALL JSON DATA.
 //          This is horrible! Make it just append to existing data
-
 function appendToUsers(newUser) {
     let allUserData = loadAllUserData();
     allUserData.push(newUser);
     let updatedUserData = JSON.stringify(allUserData);
-    console.log("updatedUserData: " + updatedUserData);
+    // console.log("updatedUserData: " + updatedUserData);
     fs.writeFileSync(usersFile, updatedUserData, "utf8", function (err) {
         if (err) console.log(err);
     });
